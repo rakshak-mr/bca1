@@ -1,0 +1,31 @@
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+$form = New-Object System.Windows.Forms.Form
+$form.Text = "4-Key Keyboard"
+$form.Size = New-Object System.Drawing.Size(250, 150)
+$form.TopMost = $true
+
+# Create 4 buttons
+$keys = @("A", "B", "C", "D")
+$x = 20
+
+foreach ($key in $keys) {
+    $button = New-Object System.Windows.Forms.Button
+    $button.Text = $key
+    $button.Size = New-Object System.Drawing.Size(40, 40)
+    $button.Location = New-Object System.Drawing.Point($x, 30)
+    $button.Add_Click({
+        $keyPressed = $this.Text
+        [System.Windows.Forms.SendKeys]::SendWait($keyPressed)
+    })
+    $form.Controls.Add($button)
+    $x += 55
+}
+
+# Keep the window open
+$form.Add_FormClosed({
+    [System.Windows.Forms.Application]::Exit()
+})
+
+$form.ShowDialog()
